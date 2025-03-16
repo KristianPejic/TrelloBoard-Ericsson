@@ -1,0 +1,37 @@
+<header class="bg-white shadow">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center py-4">
+      <div class="flex items-center space-x-4">
+        <a routerLink="/dashboard" class="text-2xl font-bold text-primary"
+          >TrelloBoard</a
+        >
+
+        <nav *ngIf="currentUser" class="hidden md:flex space-x-4">
+          <a
+            routerLink="/dashboard"
+            routerLinkActive="text-primary"
+            class="px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
+            >Dashboard</a
+          >
+          <a
+            routerLink="/boards"
+            routerLinkActive="text-primary"
+            class="px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
+            >My Boards</a
+          >
+        </nav>
+      </div>
+
+      <div *ngIf="currentUser" class="flex items-center space-x-4">
+        <div class="hidden md:block text-sm">
+          <span class="text-gray-500">Welcome,</span>
+          <span class="font-medium ml-1">{{ currentUser.username }}</span>
+        </div>
+
+        <button (click)="logout()" class="btn btn-secondary text-sm">
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

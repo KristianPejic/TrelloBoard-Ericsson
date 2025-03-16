@@ -1,0 +1,104 @@
+<div class="flex h-screen bg-gray-100">
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <app-header></app-header>
+
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+      <div class="container mx-auto px-6 py-8">
+        <div class="flex justify-between items-center mb-6">
+          <h1 class="text-3xl font-semibold text-gray-800">Dashboard</h1>
+
+          <button (click)="toggleCreateForm()" class="btn btn-primary">
+            {{ showCreateForm ? "Cancel" : "Create New Board" }}
+          </button>
+        </div>
+
+        <div *ngIf="showCreateForm" class="bg-white rounded-lg shadow mb-6 p-6">
+          <h2 class="text-lg font-medium mb-4">Create a New Board</h2>
+
+          <form [formGroup]="createBoardForm" (ngSubmit)="createBoard()">
+            <div class="mb-4">
+              <label for="boardName" class="form-label">Board Name</label>
+              <input
+                type="text"
+                id="boardName"
+                formControlName="name"
+                class="form-input"
+                placeholder="Enter board name"
+              />
+              <div
+                *ngIf="
+                  createBoardForm.get('name')?.invalid &&
+                  createBoardForm.get('name')?.touched
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                <span *ngIf="createBoardForm.get('name')?.errors?.['required']"
+                  >Board name is required</span
+                >
+                <span *ngIf="createBoardForm.get('name')?.errors?.['minlength']"
+                  >Board name must be at least 3 characters</span
+                >
+              </div>
+            </div>
+
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="createBoardForm.invalid || isLoading"
+              >
+                {{ isLoading ? "Creating..." : "Create Board" }}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div
+          *ngIf="errorMessage"
+          class="bg-red-100 text-red-700 p-4 rounded-md mb-6"
+        >
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="isLoading" class="flex justify-center py-10">
+          <p class="text-gray-500">Loading boards...</p>
+        </div>
+
+        <div
+          *ngIf="!isLoading && boards.length === 0"
+          class="bg-white rounded-lg shadow p-6 text-center"
+        >
+          <p class="text-gray-500 mb-4">You don't have any boards yet.</p>
+          <button (click)="toggleCreateForm()" class="btn btn-primary">
+            Create Your First Board
+          </button>
+        </div>
+
+        <div
+          *ngIf="!isLoading && boards.length > 0"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <a
+            *ngFor="let board of boards"
+            [routerLink]="['/boards', board.id]"
+            class="bg-white rounded-lg shadow hover:shadow-md transition-shadow p-6 flex flex-col"
+          >
+            <h2 class="text-xl font-medium text-gray-800 mb-2">
+              {{ board.name }}
+            </h2>
+            <div
+              class="mt-auto pt-4 flex justify-between items-center text-sm text-gray-500"
+            >
+              <span>
+                <!-- We could add task count or other metadata here -->
+              </span>
+              <span>View Board →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
